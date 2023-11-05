@@ -19,7 +19,8 @@ df = pd.read_csv("eGRID2021_data_plnt.csv", usecols= columns_to_read)
 print(df['PSTATABB'].unique())
 df['PLNGENAN'] = pd.to_numeric(df['PLNGENAN'].str.replace(',', ''), errors='coerce')
 df = df.dropna(subset=['PLNGENAN'])
-df = df.groupby('PSTATABB', as_index=False)['PLNGENAN'].sum()
+df['PLNGENANFLTRD'] = df['PLNGENAN'].apply(lambda x: max(0, x))
+# df = df.groupby('PSTATABB', as_index=False)['PLNGENAN'].sum()
 # df.reset_index(inplace=True)
 print(df[:5])
 
@@ -39,7 +40,7 @@ app.layout = html.Div([
     html.Div(id='output_container', children=[]),
     html.Br(),
 
-    dcc.Graph(id='my_bee_map', figure={})
+    dcc.Graph(id='my_bee_map', figure={}, style={'width': '100%', 'height': '90vh'})
 
 ])
 
@@ -57,7 +58,7 @@ def update_graph(option_slctd):
     container = "The state chosen by user was: {}".format(option_slctd)
 
     dff = df.copy()
-    dff = dff[dff["PSTATABB"] == option_slctd]
+    # dff = dff[dff["PSTATABB"] == option_slctd]
 
     # Plotly Express
     # fig = px.choropleth(
@@ -72,13 +73,39 @@ def update_graph(option_slctd):
     #     template='plotly_dark'
     # )
 
-    fig = px.scatter_geo(dff,
-                     locationmode='USA-states', 
-                     locations="iso_alpha",
-                     color="continent", # which column to use to set the color of markers
-                     hover_name="country", # column added to hover information
-                     size="pop", # size of markers
-                     projection="natural earth")
+    fig = px.scatter_mapbox(dff, 
+                        lat='LAT', 
+                        lon='LON', 
+                        hover_data=['PLNGENAN'],
+                        color='PSTATABB', 
+                        size='PLNGENANFLTRD', 
+                        zoom=3, 
+                        center=dict(lat=37.7749 , lon=-96.7885),
+                        mapbox_style='open-street-map')
+    
+#     fig = px.scatter_geo(
+#     df,
+#     locationmode='USA-states',
+#     lat='LAT',
+#     lon='LON',
+#     color='PSTATABB', 
+#     size='PLNGENANFLTRD',
+#     projection = 'albers usa'
+# )
+#     fig.update_geos(
+#     scope="usa",  # Focus on the United States
+#     center=dict(lat=37.0902, lon=-95.7129),  # Set the center of the map to include Alaska
+#     projection_scale=2  # Adjust the zoom level as needed
+# )
+    # fig.update_layout(
+    # geo=dict(
+    #     showcoastlines=True,
+    #     coastlinecolor="Black",
+    #     showland=True,
+    #     landcolor="rgb(0, 229, 229)",
+    #     showframe=False
+    # )
+# )
 
     return container, fig
 # ------------------------------------------------------------------------------
