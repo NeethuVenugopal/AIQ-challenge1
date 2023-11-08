@@ -1,5 +1,2 @@
-dash==2.14.1
-Flask==2.2.5
-pandas==1.3.5
-plotly==5.18.0
-numpy
+dash
+pandas
