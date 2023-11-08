@@ -39,7 +39,7 @@ options.extend(statelist)
 #------------------------------------------------------------------------------------
 
 # App layout
-app.layout = html.Div([
+application.layout = html.Div([
     
     dcc.Location(id = 'url'),
     html.H1("Power Plants in US", style={'text-align': 'center'}),
@@ -82,7 +82,7 @@ app.layout = html.Div([
 #      Input(component_id='dropnum', component_property='value'),]
 # )
 #Define outputs and inputs for callback
-@app.callback(
+@application.callback(
     [Output(component_id='plant_map', component_property='figure'),
      Output(component_id='bar_plot', component_property='figure')],
     [Input(component_id='statelist', component_property='value'),
