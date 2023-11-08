@@ -1,2 +1,7 @@
 vizenv
 eGRID2021_data.xlsx
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+powerplnt.zip
