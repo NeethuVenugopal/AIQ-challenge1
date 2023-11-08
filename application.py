@@ -153,5 +153,5 @@ def update_graph(option_slctd, search_param):
     return fig, bar
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    application.run_server(debug=False)
+    application.run_server(host='0.0.0.0', port=8050, debug=False)
 
